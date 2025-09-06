@@ -1,103 +1,107 @@
-# 🏠 NYC Eviction Trends Analysis (2017–2024)
+## Phase 1: Ask
+**Goal:** Define the problem and set the focus of the analysis.  
 
-## 📌 Project Overview
-This capstone project analyzes **publicly available eviction records** from [NYC Open Data](https://opendata.cityofnewyork.us/).  
-The goal is to uncover **eviction trends in New York City from 2017–2024**, providing insights for **policymakers, housing advocates, and community organizations** to improve housing stability and prevent homelessness.  
+- **Steps Taken:**  
+  - Identified rising concern around housing instability in NYC  
+  - Narrowed focus to eviction trends between 2017–2024  
+  - Framed guiding questions:  
+    - How have eviction rates changed over time?  
+    - Which boroughs are most affected?  
+    - What external factors (e.g., COVID-19 moratoriums) influenced the data?  
 
-Key study periods:
-- **Pre-Pandemic (2017–Feb 2020)**
-- **Pandemic/Moratorium (Mar 2020–Aug 2021)**
-- **Post-Moratorium (Sep 2021–2024)**
-
----
-
-## 🎯 Project Goals
-- Identify **temporal trends** in executed evictions.  
-- Map **geographic distributions** (boroughs, zip codes).  
-- Compare **residential vs. commercial** eviction ratios.  
-- Provide **data-driven insights** to support policy and advocacy efforts.  
+- **Implications:**  
+  - Establishes a clear research scope  
+  - Aligns project with real-world policy and community relevance  
 
 ---
 
-## 👥 Key Stakeholders (Hypothetical)
-- NYC Department of Housing Preservation & Development (HPD)  
-- NYC Public Advocates Office  
-- Legal Aid Societies & Tenant Rights Organizations  
-- NYC Council Members & State Legislators  
-- Community Boards & Neighborhood Associations  
-- Homeless Services Providers  
+## Phase 2: Prepare
+**Goal:** Collect, clean, and organize the eviction dataset for analysis.  
+
+- **Steps Taken:**  
+  - Acquired NYC eviction dataset (2017–2024)  
+  - Verified completeness and consistency of fields (borough, year, property type, counts)  
+  - Standardized formats for dates, borough codes, and property classifications  
+  - Documented data dictionary and assumptions for clarity  
+
+- **Implications:**  
+  - Ensures data reliability for downstream analysis  
+  - Creates a clean foundation for reproducible queries and insights  
 
 ---
 
-## 🧑‍💼 Audience & Impact
-The analysis is designed for:
-- **Policymakers:** Evaluate resource allocation, policy effectiveness, and service planning.  
-- **Legal Aid & Advocacy Groups:** Identify eviction hotspots and strengthen advocacy efforts.  
-- **Community & Service Providers:** Support housing initiatives and forecast service needs.  
+## Phase 3: Process
+**Goal:** Transform and structure the dataset for deeper analysis.  
+
+- **Steps Taken:**  
+  - Created SQL tables for borough, property type, and yearly counts  
+  - Used CTEs to break down eviction counts by year and borough  
+  - Applied functions (e.g., regex_replace) to clean inconsistencies  
+  - Prepared queries to compare pre-, during-, and post-pandemic periods  
+
+- **Deliverables:**  
+  - SQL scripts for structured tables and cleaned outputs  
+  - Dataset ready for exploratory analysis  
 
 ---
 
-## 📊 Data Source
-**Dataset:** NYC Open Data – [Evictions](https://opendata.cityofnewyork.us/)  
-Contains records of **executed eviction warrants**.
+## Phase 4: Analyze
+**Goal:** Apply analytical techniques to identify trends, patterns, and insights.  
 
-### Key Columns
-- Executed Date  
-- Borough  
-- Zip Code  
-- Residential/Commercial  
-- Marshal Details  
-- Court Index Number  
-- Docket Number  
+- **Steps Taken:**  
+  - Aggregated eviction counts by year and month to observe temporal trends  
+  - Grouped data by borough to assess geographic differences  
+  - Compared residential vs. commercial eviction ratios  
+  - Checked for seasonal variations across years  
 
-### Key Metrics
-- Total executed evictions (monthly, quarterly, annually).  
-- % change (MoM, YoY).  
-- Geographic distribution (borough/zip).  
-- Residential vs. commercial ratios.  
-- Period-specific comparisons (pre-pandemic, pandemic, post-pandemic).  
+- **Findings:**  
+  - Temporal: Evictions declined sharply in 2020–21, rose again post-2022, still below 2017 levels  
+  - Geographic: Bronx & Brooklyn consistently report the highest eviction counts  
+  - Property Type: Residential evictions dominate over commercial cases  
+  - Seasonal: No strong seasonal pattern detected; external events (e.g., moratoriums) had larger effects  
+
+- **Implications:**  
+  - Trends can guide policy evaluation and resource allocation  
+  - Borough analysis identifies “eviction hotspots” for targeted support  
+  - Residential focus highlights direct links to housing instability  
 
 ---
 
-## 🛠️ Workflow
+## Phase 5: Share
+**Goal:** Communicate findings effectively to the intended audience.  
 
-### Phase 1: Ask
-- Define problem: **Housing instability driven by evictions.**
-- Frame guiding questions and audience impact.
+- **Methods of Sharing:**  
+  - Executive summary for policymakers  
+  - Visualizations (time-series charts, borough maps, comparisons by period)  
+  - Concise, clear language to ensure accessibility for non-technical readers  
 
-### Phase 2: Prepare
-- Data downloaded from NYC Open Data as CSV.  
-- Organized into `data/raw/` and `data/processed/`.  
-- ROCCC Analysis:  
-  - **Reliable:** ✅ Official NYC Marshal records  
-  - **Original:** ✅ Primary source  
-  - **Comprehensive:** ⚠ Missing reasons & demographics  
-  - **Current:** ✅ Updated  
-  - **Cited:** ✅ Official attribution  
+- **Data Story:**  
+  - Evictions are a persistent challenge in NYC  
+  - COVID-19 moratoriums caused a temporary sharp decline  
+  - Eviction rates are rising again toward pre-pandemic levels  
+  - Bronx & Brooklyn remain most affected  
 
-**Limitations:**  
-- Only covers executed evictions (not filings).  
-- No demographic data.  
-- Limited to zip code precision.  
+- **Planned Deliverables:**  
+  - Comprehensive written report  
+  - Presentation deck with visuals  
+  - Open-access repository with SQL scripts, cleaned data, and charts  
 
-### Phase 3: Process
-Cleaning & transformation steps:
-- Converted `executed_date` → Date type.  
-- Removed PII.  
-- Deduplicated (`case_id`, `docket_number`, `executed_date`).  
-- Validated date range (2017–2024).  
-- Standardized categorical values (borough, property_type).  
-- Filtered for **residential** properties.  
+---
 
-**Sample SQL:**  
-```sql
--- Total evictions by borough
-SELECT borough, COUNT(*) AS Total_Eviction
-FROM evictions
-GROUP BY borough;
+## Phase 6: Act
+**Goal:** Translate insights into practical recommendations and next steps.  
 
--- Check for duplicates
-SELECT case_id, docket_number, executed_date, COUNT(*) AS Count
-FROM evictions
-GROUP BY case_id, docket_number, executed_date
-HAVING COUNT(*) > 1;
+- **Conclusions:**  
+  - External events (pandemic, moratoriums) significantly impacted eviction rates  
+  - Evictions remain concentrated in Bronx & Brooklyn  
+  - Rates are trending upward, signaling ongoing housing instability  
+
+- **Recommendations for Stakeholders:**  
+  - Expand rental assistance and prevention programs in high-impact boroughs  
+  - Pilot targeted interventions and measure effectiveness  
+  - Strengthen tenant protections in eviction hotspots  
+
+- **Next Steps:**  
+  - Convene policymakers, legal aid, and community leaders for discussion  
+  - Integrate eviction dataset with additional sources (filings, demographics, rental prices, court outcomes)  
+  - Monitor trends beyond 2024 to evaluate long-term housing stability  
